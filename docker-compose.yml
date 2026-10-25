@@ -1,0 +1,29 @@
+services:
+  mediacenter:
+    build: .
+    image: mediacenter:latest
+    container_name: mediacenter
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      LIB_DIR: /data/library
+      CACHE_DIR: /data/.cache
+      THUMB_DIR: /data/.thumbs
+      PORT: "8080"
+      # Batasi ffmpeg/ffprobe paralel agar cocok dengan limit CPU di bawah.
+      FF_CONCURRENCY: "2"
+      # RESCAN_TOKEN: "ganti-dengan-token-acak"
+    # Batasan resource.
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1g
+        reservations:
+          cpus: "0.25"
+          memory: 256m
+    volumes:
+      - ./library:/data/library
+      - ./.cache:/data/.cache
+      - ./.thumbs:/data/.thumbs

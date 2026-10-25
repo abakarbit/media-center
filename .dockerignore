@@ -1,0 +1,15 @@
+.git
+library
+.cache
+.thumbs
+*.mp4
+*.mkv
+*.webm
+*.avi
+*.mov
+*.m4v
+*.jpg
+*.srt
+*.vtt
+mediacenter
+README*

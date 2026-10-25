@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+{{template "head" .Head}}
+</head>
+<body class="watch">
+<header class="topbar">
+  <a class="brand" href="/">MEDIA<span>CENTER</span></a>
+  {{if .PlLabel}}
+    <a class="back" href="/playlist?pl={{.PlID}}">&larr; {{.PlLabel}}</a>
+  {{else}}
+    <a class="back" href="/">&larr; Beranda</a>
+  {{end}}
+</header>
+
+<main class="wrap player-wrap">
+  <div class="stage">
+    <video id="player" controls playsinline preload="metadata"
+           poster="{{thumb .V.Rel}}"
+           data-id="{{vidID .V.Rel}}"
+           data-dur="{{printf "%.0f" .V.Duration}}"
+           {{if .NextURL}}data-next="{{.NextURL}}"{{end}}>
+      <source src="{{.Src}}">
+      {{if .SubURL}}<track kind="subtitles" srclang="id" label="Indonesia" default src="{{.SubURL}}">{{end}}
+      Browser tidak mendukung pemutar video.
+    </video>
+  </div>
+
+  <section class="info">
+    <h1>{{.V.Title}}</h1>
+    <div class="chips">
+      {{if .PlLabel}}<span>{{.PlLabel}}</span>{{end}}
+      {{if gt .Idx 0}}<span>Ep {{.Idx}} / {{.Count}}</span>{{end}}
+      <span>{{dur .V.Duration}}</span>
+      {{if .V.Height}}<span>{{.V.Width}}×{{.V.Height}}</span>{{end}}
+      {{if .V.Vcodec}}<span>{{upper .V.Vcodec}}</span>{{end}}
+      <span>{{size .V.Size}}</span>
+    </div>
+    <p class="path">{{.V.Rel}}</p>
+  </section>
+
+  <nav class="pn">
+    {{if .Prev}}<a class="pbtn" href="/watch?id={{vidID .Prev.Rel}}{{if .PlID}}&amp;pl={{.PlID}}{{end}}">&larr; Sebelumnya</a>{{else}}<span class="pbtn off">&larr; Sebelumnya</span>{{end}}
+    {{if .Next}}<a class="pbtn" href="/watch?id={{vidID .Next.Rel}}{{if .PlID}}&amp;pl={{.PlID}}{{end}}">Berikutnya &rarr;</a>{{else}}<span class="pbtn off">Berikutnya &rarr;</span>{{end}}
+  </nav>
+
+  {{if .Others}}
+  <section class="row">
+    <div class="row-head"><h3>{{if .PlLabel}}{{.PlLabel}}{{else}}Lainnya{{end}}</h3></div>
+    <div class="rail">
+      {{range $i, $o := .Others}}{{if lt $i 24}}
+      <a class="card small" href="/watch?id={{vidID $o.Rel}}{{if $.PlID}}&amp;pl={{$.PlID}}{{end}}"
+         data-id="{{vidID $o.Rel}}" data-dur="{{printf "%.0f" $o.Duration}}">
+        <div class="poster">
+          <img loading="lazy" src="{{thumb $o.Rel}}" alt="">
+          <span class="badge">{{if $o.EpLabel}}{{$o.EpLabel}}{{else}}{{dur $o.Duration}}{{end}}</span>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="meta"><div class="title">{{$o.Title}}</div></div>
+      </a>
+      {{end}}{{end}}
+    </div>
+  </section>
+  {{end}}
+</main>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>

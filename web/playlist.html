@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+{{template "head" .Head}}
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">MEDIA<span>CENTER</span></a>
+  <a class="back" href="/">&larr; Beranda</a>
+</header>
+
+<section class="hero small">
+  <div class="hero-bg">{{if .First}}<img src="{{thumb .First.Rel}}" alt="" fetchpriority="high">{{end}}</div>
+  <div class="hero-grad"></div>
+  <div class="hero-body">
+    <span class="tag">Playlist</span>
+    <h1>{{.Label}}</h1>
+    <div class="hero-meta">
+      <span>{{len .Items}} episode</span>
+      <span>Total {{dur .Total}}</span>
+    </div>
+    {{if .First}}
+    <a class="btn-play" href="/watch?id={{vidID .First.Rel}}&amp;pl={{.PlID}}">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+      Putar Semua
+    </a>
+    {{end}}
+  </div>
+</section>
+
+<main class="wrap">
+  <section class="row">
+    <div class="row-head"><h3>Daftar Episode</h3></div>
+    <ol class="eplist">
+      {{range $n, $it := .Items}}
+      <li>
+        <a href="/watch?id={{vidID $it.Rel}}&amp;pl={{$.PlID}}"
+           data-id="{{vidID $it.Rel}}" data-dur="{{printf "%.0f" $it.Duration}}">
+          <span class="num">{{if $it.Ep}}{{$it.EpNum}}{{else}}{{inc $n}}{{end}}</span>
+          <span class="th"><img loading="lazy" src="{{thumb $it.Rel}}" alt=""></span>
+          <span class="txt">
+            <span class="tt">{{$it.Title}}</span>
+            <span class="ts">{{dur $it.Duration}} · {{size $it.Size}}</span>
+            <span class="pbar"><i></i></span>
+          </span>
+          <span class="go">▶</span>
+        </a>
+      </li>
+      {{end}}
+    </ol>
+  </section>
+</main>
+
+<footer class="foot">Playlist dari folder <code>library/{{.Dir}}</code></footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>

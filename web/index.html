@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+{{template "head" .Head}}
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">MEDIA<span>CENTER</span></a>
+  <nav class="nav">
+    <a href="/" class="active">Beranda</a>
+    <a href="/#koleksi">Koleksi</a>
+  </nav>
+  <div class="stat">{{.Total}} judul{{if .HasFolders}} · {{len .Playlists}} playlist{{end}}</div>
+</header>
+
+{{if eq .Total 0}}
+<main class="wrap">
+  <div class="empty">
+    <div class="empty-ico">🎬</div>
+    <h2>Belum ada video</h2>
+    <p>Taruh berkas video di <code>library/</code> — atau buat folder di dalamnya untuk jadi playlist otomatis.</p>
+    <pre>library/Film Aku/episode1.mp4
+library/Film Aku/episode2.mp4   →  playlist "Film Aku"</pre>
+    <p class="muted">Format: {{.Ext}} · subtitle <code>.srt</code>/<code>.vtt</code> senama</p>
+  </div>
+</main>
+{{else}}
+
+{{if .Hero}}
+<section class="hero">
+  <div class="hero-bg"><img src="{{thumb .Hero.Rel}}" alt="" fetchpriority="high"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-body">
+    <span class="tag">Terbaru</span>
+    <h1>{{.Hero.Title}}</h1>
+    <div class="hero-meta">
+      <span>{{dur .Hero.Duration}}</span>
+      {{if .Hero.Height}}<span>{{.Hero.Height}}p</span>{{end}}
+      <span>{{size .Hero.Size}}</span>
+    </div>
+    <a class="btn-play" href="/watch?id={{vidID .Hero.Rel}}">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+      Putar
+    </a>
+  </div>
+</section>
+{{end}}
+
+<main class="wrap">
+
+{{if .Playlists}}
+<section class="row" id="koleksi">
+  <div class="row-head">
+    <h3>Playlist</h3>
+    <span class="muted">dari folder di <code>library/</code></span>
+  </div>
+  <div class="grid kol">
+    {{range .Playlists}}
+    <a class="kcard" href="/playlist?pl={{vidID .Dir}}">
+      <div class="kcovers">
+        {{range $i, $it := .Items}}{{if lt $i 3}}<span><img loading="lazy" src="{{thumb $it.Rel}}" alt=""></span>{{end}}{{end}}
+      </div>
+      <div class="kmeta">
+        <div class="ktitle">{{.Label}}</div>
+        <div class="ksub">{{len .Items}} episode</div>
+      </div>
+    </a>
+    {{end}}
+  </div>
+</section>
+{{end}}
+
+{{range .Playlists}}
+<section class="row">
+  <div class="row-head">
+    <h3>{{.Label}}</h3>
+    <a class="more" href="/playlist?pl={{vidID .Dir}}">Lihat semua →</a>
+  </div>
+  <div class="rail">
+    {{range $i, $it := .Items}}{{if lt $i 20}}
+    <a class="card" href="/watch?id={{vidID $it.Rel}}"
+       data-id="{{vidID $it.Rel}}" data-dur="{{printf "%.0f" $it.Duration}}">
+      <div class="poster">
+        <img loading="lazy" src="{{thumb $it.Rel}}" alt="">
+        <span class="badge">{{if $it.EpLabel}}{{$it.EpLabel}}{{else}}{{dur $it.Duration}}{{end}}</span>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="meta">
+        <div class="title">{{$it.Title}}</div>
+        <div class="sub">{{dur $it.Duration}} · {{size $it.Size}}</div>
+      </div>
+    </a>
+    {{end}}{{end}}
+  </div>
+</section>
+{{end}}
+
+{{if .Root}}
+<section class="row">
+  <div class="row-head"><h3>Semua Video</h3></div>
+  <div class="grid">
+    {{range .Root}}
+    <a class="card" href="/watch?id={{vidID .Rel}}"
+       data-id="{{vidID .Rel}}" data-dur="{{printf "%.0f" .Duration}}">
+      <div class="poster">
+        <img loading="lazy" src="{{thumb .Rel}}" alt="">
+        <span class="badge">{{dur .Duration}}</span>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="meta">
+        <div class="title">{{.Title}}</div>
+        <div class="sub">{{size .Size}}{{if .Height}} · {{.Height}}p{{end}}</div>
+      </div>
+    </a>
+    {{end}}
+  </div>
+</section>
+{{end}}
+
+<section class="row" data-row="continue" hidden>
+  <div class="row-head"><h3>Lanjutkan Menonton</h3></div>
+  <div class="rail" id="continueRail"></div>
+</section>
+
+</main>
+{{end}}
+
+<footer class="foot">
+  Media Center · drop berkas ke <code>library/</code> · folder = playlist otomatis
+</footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{{define "head"}}<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08080c">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="{{.Desc}}">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>{{.Title}}</title>
+{{if .URL}}<link rel="canonical" href="{{.URL}}">{{end}}
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">
+<meta property="og:site_name" content="Media Center">
+<meta property="og:locale" content="id_ID">
+<meta property="og:type" content="{{.Type}}">
+{{if .URL}}<meta property="og:url" content="{{.URL}}">{{end}}
+<meta property="og:title" content="{{.Title}}">
+<meta property="og:description" content="{{.Desc}}">
+{{if .Image}}<meta property="og:image" content="{{.Image}}">
+<meta property="og:image:alt" content="{{.Title}}">{{end}}
+<meta name="twitter:card" content="{{if .Image}}summary_large_image{{else}}summary{{end}}">
+<meta name="twitter:title" content="{{.Title}}">
+<meta name="twitter:description" content="{{.Desc}}">
+{{if .Image}}<meta name="twitter:image" content="{{.Image}}">{{end}}
+<link rel="stylesheet" href="/assets/style.css">{{end}}

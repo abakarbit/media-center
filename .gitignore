@@ -1,0 +1,18 @@
+# ---- data runtime: jangan di-commit ----
+/library/*
+!/library/README.txt
+/.cache/
+/.thumbs/
+
+# ---- hasil build ----
+/mediacenter
+*.exe
+*.test
+*.out
+
+# ---- editor / OS ----
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
